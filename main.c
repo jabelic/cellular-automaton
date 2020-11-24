@@ -10,9 +10,13 @@ int main(void){
   scanf("%d", &road);
   int r1[2][road], tmp[2][road]; // セル数がroad個の配列。
 
-  for (i = 0; i < road; i++){
-    r1[0][i] = 0;
-    tmp[0][i] = 0;
+
+  // initialization
+  for (i = 0; i < 2; i++){
+    for (j = 0; j < road; j++){
+      r1[i][j] = 0;
+      tmp[i][j] = 0;
+    }
   }
 
   int car;
