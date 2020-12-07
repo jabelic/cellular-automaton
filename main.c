@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#define LINE 3
+#define LINE 2
 
 int main(void){
   int i, x, p, t, m;
@@ -62,7 +62,56 @@ int main(void){
   scanf("%d", &t);
 
   p = 0;
+  int t1, t2;
+  /*
+  for (int c = road-1; c >= 0; c--){
+    for (int l = 0; l < 2; l++){
+      if (r1[l][c]){ // 車がこのセルにあるとき
+        for (int t1 = 0; !r1[l+t1][c] ; t1++); // 自分の前の空いているスペース
+        if (c == 0){
+          for (int t2 = 0; !r1[l+t2][c+1] ; t2++); // となり車線
+        }else if(c == 1){
+          for (int t2 = 0; !r1[l+t2][c-1] ; t2++); // となり車線
+        }
+        if (t1 > t2){
+          tmp[l+t1-1][c] = 1;
+          tmp[l][c] = 0;
+        }else{
+          if(c==0){
+            tmp[l+t2-1][c+1] = 1;
+            tmp[l][c] = 0;
+          }else if(c==1){
+            tmp[l+t2-1][c-1] = 1;
+            tmp[l][c] = 0;
+          }
+        }
+      }
+    }
+  }*/
+  for (int c = road-1; c >= 0; c--){
+    for (int l = 0; l < 2; l++){
+      if (r1[l][c]){
+        // for (int t1 = 0; !r1[l+t1][c] ; t1++);
+        t1 = 0;
+        while(!r1[l+t1][c]){
+          t1++;
+        }
+      }
+      // printf("%d", r1[l][c]);
+      printf("%d\n", t1);
+    }
+  }printf("\n");
 
+  for (int t = 0; t < LINE; t++){
+      for (x = 0; x < road; x++){
+        printf("%d", tmp[t][x]);
+        // tmp[t][x] = 0;
+      }
+      if (t!=LINE-1){
+        printf("\n");
+      }
+  }
+/*
   while (p < t){
 
     for (x = 0; x < road; x++){
@@ -103,7 +152,7 @@ int main(void){
     }
     p++;
     printf(" /t=%d\n\n", p);
-  }
+  }*/
 
   printf("\n");
   return 0;
