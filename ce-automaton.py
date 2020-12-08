@@ -2,6 +2,7 @@ import random
 import copy
 import sys
 
+
 def rand_ints_nodup(a, b, k):
     ns = []
     while len(ns) < k:
@@ -117,7 +118,7 @@ def main():
         for i in range(line):
             print(tmplist[i])
         print()
-        lines = tmplist
+        lines = copy.deepcopy(tmplist)
     
 if __name__ == "__main__":
     main()
