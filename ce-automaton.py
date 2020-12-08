@@ -72,6 +72,9 @@ def process(line, cell, lines, tmplist):
                 elif next_forward <= forward and lines[l][c+1] == 0:
                     if l == 2 and lines[l+1][c] == 1: #lane2で右に車がいれば, 譲る
                         tmplist[l][c] = 1
+                    elif l==3 and lines[l-1][c] == 0 and lines[l-1][c+1] == 0: # lane3 は左に行ける余裕があればいく.
+                        tmplist[l-1][c+1] = 1
+                        tmplist[l][c] = 0
                     else:
                         tmplist[l][c+1] = 1
                         tmplist[l][c] = 0
@@ -94,7 +97,7 @@ def main():
     lines[2].append(1)
     lines[3].append(1)
     lines[4] = [2]*(cell+1)
-    car = 10
+    car = 12
     lines = setcar_list(car, line, lines)
     redc = 3 # cell num for lane reduction
     for i in range(redc):
