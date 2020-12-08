@@ -44,8 +44,8 @@ def process(line, cell, lines, tmplist):
                         left_forward = 1
                         while(left_forward <= cell - c and not lines[l-1][c+left_forward]):
                             left_forward += 1
-                        next_forward = right_forward
-                        left_forward = 0
+                        next_forward = left_forward
+                        right_forward = 0
                     """
                     if lines[l+1][c] == 0:
                         right_forward = 1
@@ -99,7 +99,7 @@ def main():
     lines[2].append(1)
     lines[3].append(1)
     lines[4] = [2]*(cell+1)
-    car = 14
+    car = 10
     lines = setcar_list(car, line, lines)
     redc = 3 # cell num for lane reduction
     for i in range(redc):
