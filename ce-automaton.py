@@ -1,3 +1,5 @@
+# Ver. 3
+
 import random
 import copy
 import sys
@@ -13,7 +15,6 @@ def rand_ints_nodup(a, b, k):
 
 def setcar_list(car, line, lines):
     index = rand_ints_nodup(0, 9*(line-2), car)
-
     for i in range(car):
         lines[index[i]%3+1][index[i]//3] = 1
     return lines
@@ -47,21 +48,11 @@ def process(line, cell, lines, tmplist):
                             left_forward += 1
                         next_forward = left_forward
                         right_forward = 0
-                    """
-                    if lines[l+1][c] == 0:
-                        right_forward = 1
-                        while(right_forward <= cell - c and not lines[l+1][c+right_forward]):
-                            right_forward += 1
-                    if right_forward < left_forward:
-                        next_forward = left_forward
-                        right_forward = 0
-                    else:"""
-                elif l==3:
-                    if lines[l-1][c] == 0: #隣のレーンに車が並んでいないか. 並んでいたらぶつかるかもしれない.
-                        left_forward = 1
-                        while(left_forward <= cell - c and not lines[l- 1][c+left_forward]):
-                            left_forward += 1
-                        next_forward = left_forward
+                elif l==3: # lane3は左前が空いていれば強制的にlane2に移動する.
+                    left_forward = 1
+                    while(left_forward <= cell - c and not lines[l- 1][c+left_forward]):
+                        left_forward += 1
+                    next_forward = left_forward
                 
                 # 隣の車線の方が空いているとき
                 if next_forward > forward and l==1:
@@ -75,12 +66,15 @@ def process(line, cell, lines, tmplist):
                         tmplist[l+1][c+1] = 1
                         tmplist[l][c] = 0
                 elif next_forward > forward and l==3:
-                    tmplist[l-1][c+1] = 1
+                    tmplist[l-1][c+1] = 1  # 左前に進む
                     tmplist[l][c] = 0
                 # 前方の方が空いているとき.
                 elif next_forward <= forward and lines[l][c+1] == 0:
-                    tmplist[l][c+1] = 1
-                    tmplist[l][c] = 0
+                    if l == 2 and lines[l+1][c] == 1: #lane2で右に車がいれば, 譲る
+                        tmplist[l][c] = 1
+                    else:
+                        tmplist[l][c+1] = 1
+                        tmplist[l][c] = 0
             elif c == cell-1:
                 if lines[l][c] == 1 and lines[l][c+1] == 1:
                     tmplist[l][c] = 0
