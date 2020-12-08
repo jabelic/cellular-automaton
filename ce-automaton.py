@@ -44,6 +44,9 @@ def process(line, cell, lines, tmplist):
                         left_forward = 1
                         while(left_forward <= cell - c and not lines[l-1][c+left_forward]):
                             left_forward += 1
+                        next_forward = right_forward
+                        left_forward = 0
+                    """
                     if lines[l+1][c] == 0:
                         right_forward = 1
                         while(right_forward <= cell - c and not lines[l+1][c+right_forward]):
@@ -51,9 +54,7 @@ def process(line, cell, lines, tmplist):
                     if right_forward < left_forward:
                         next_forward = left_forward
                         right_forward = 0
-                    else:
-                        next_forward = right_forward
-                        left_forward = 0
+                    else:"""
                 elif l==3:
                     if lines[l-1][c] == 0: #隣のレーンに車が並んでいないか. 並んでいたらぶつかるかもしれない.
                         left_forward = 1
@@ -100,9 +101,9 @@ def main():
     lines[4] = [2]*(cell+1)
     car = 14
     lines = setcar_list(car, line, lines)
-    lines[3][-2] = 2
-    lines[3][-3] = 2
-    lines[3][-4] = 2
+    redc = 3 # cell num for lane reduction
+    for i in range(redc):
+        lines[3][-2 - i] = 2
     tmplist = copy.deepcopy(lines)
     for i in range(line):
         print(lines[i])
@@ -110,9 +111,9 @@ def main():
     
     for _ in range(10):
         tmplist = process(line, cell, lines, tmplist)
-        tmplist[1][0] = random.randint(0,1)
-        tmplist[2][0] = random.randint(0,1)
-        tmplist[3][0] = random.randint(0,1)
+        for i in range(1, 4):
+            if tmplist[i][0] == 0:
+                tmplist[i][0] = random.randint(0,1)
         for i in range(line):
             print(tmplist[i])
         print()
