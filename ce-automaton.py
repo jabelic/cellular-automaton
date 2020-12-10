@@ -1,4 +1,4 @@
-# Ver. 3
+# Ver. 4
 
 import random
 import copy
@@ -15,8 +15,8 @@ def rand_ints_nodup(a, b, k):
             ns.append(n)
     return ns
 
-def setcar_list(car, line, lines):
-    index = rand_ints_nodup(0, 9*(line-2), car)
+def setcar_list(car, line, lines, cell):
+    index = rand_ints_nodup(0, (cell-1)*(line-2), car)
     for i in range(car):
         lines[index[i]%3+1][index[i]//3] = 1
     return lines
@@ -88,16 +88,17 @@ def process(line, cell, lines, tmplist):
                     tmplist[l][c] = 1
     return tmplist
 
-def analysis(lines):
+
+def analysis(lines, cell_length):
     jam = 0
     for i in range(1, 4):
-        for j in range(9):
+        for j in range(cell_length-1):
             if lines[i][j] == 1 and lines[i][j+1] == 1:
                 jam += 1
     return jam
 
 def main():
-    cell = 10
+    cell = 20
     line = 2+3
     lines = [[0]*cell, [0]*cell, [0]*cell, [0]*cell, [0]*cell]
     lines[0] = [2]*(cell+1)
@@ -105,9 +106,9 @@ def main():
     lines[2].append(1)
     lines[3].append(1)
     lines[4] = [2]*(cell+1)
-    car = 12
-    lines = setcar_list(car, line, lines)
-    redc = 3 # cell num for lane reduction
+    car = 30
+    lines = setcar_list(car, line, lines, cell)
+    redc = 8 # cell num for lane reduction
     for i in range(redc):
         lines[3][-2 - i] = 2
     tmplist = copy.deepcopy(lines)
@@ -115,7 +116,7 @@ def main():
         print(lines[i])
     print()
     jamlist = []
-    trialnum = 10000
+    trialnum = 7000
     for _ in range(trialnum):
         tmplist = process(line, cell, lines, tmplist)
         for i in range(1, 4):
@@ -124,7 +125,7 @@ def main():
         #for i in range(line):
         #    print(tmplist[i])
         #print()
-        jamlist.append(analysis(tmplist))
+        jamlist.append(analysis(tmplist, cell))
         lines = copy.deepcopy(tmplist)
     tmpdic = dict(collections.Counter(jamlist))
     print(tmpdic)
