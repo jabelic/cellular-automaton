@@ -3,6 +3,8 @@
 import random
 import copy
 import sys
+import matplotlib.pyplot as plt
+import collections
 
 
 def rand_ints_nodup(a, b, k):
@@ -86,7 +88,13 @@ def process(line, cell, lines, tmplist):
                     tmplist[l][c] = 1
     return tmplist
 
-
+def analysis(lines):
+    jam = 0
+    for i in range(1, 4):
+        for j in range(9):
+            if lines[i][j] == 1 and lines[i][j+1] == 1:
+                jam += 1
+    return jam
 
 def main():
     cell = 10
@@ -106,16 +114,25 @@ def main():
     for i in range(line):
         print(lines[i])
     print()
-    
-    for _ in range(10):
+    jamlist = []
+    trialnum = 10000
+    for _ in range(trialnum):
         tmplist = process(line, cell, lines, tmplist)
         for i in range(1, 4):
             if tmplist[i][0] == 0:
                 tmplist[i][0] = random.randint(0,1)
-        for i in range(line):
-            print(tmplist[i])
-        print()
+        #for i in range(line):
+        #    print(tmplist[i])
+        #print()
+        jamlist.append(analysis(tmplist))
         lines = copy.deepcopy(tmplist)
+    tmpdic = dict(collections.Counter(jamlist))
+    print(tmpdic)
+    data = sorted(tmpdic.items(), key=lambda x:x[0])
+    dataX = [data[i][0] for i in range(len(data))]
+    dataY = [data[i][1] for i in range(len(data))]
+    plt.plot(dataX,dataY)
+    plt.show()
     
 if __name__ == "__main__":
     main()
