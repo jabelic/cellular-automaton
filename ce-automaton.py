@@ -97,7 +97,7 @@ def analysis(lines, cell_length):
                 jam += 1
     return jam
 
-def main():
+def main(version):
     cell = 20
     line = 2+3
     lines = [[0]*cell, [0]*cell, [0]*cell, [0]*cell, [0]*cell]
@@ -111,12 +111,15 @@ def main():
     redc = 8 # cell num for lane reduction
     for i in range(redc):
         lines[3][-2 - i] = 2
+    if version == 1:
+        lines[3][-cell+3] = 2
+        lines[3][-cell+4] = 2
     tmplist = copy.deepcopy(lines)
     for i in range(line):
         print(lines[i])
     print()
     jamlist = []
-    trialnum = 7000
+    trialnum = 5000
     for _ in range(trialnum):
         tmplist = process(line, cell, lines, tmplist)
         for i in range(1, 4):
@@ -136,4 +139,5 @@ def main():
     plt.show()
     
 if __name__ == "__main__":
-    main()
+    main(0)
+    main(1)
