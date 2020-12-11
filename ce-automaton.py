@@ -89,10 +89,10 @@ def process(line, cell, lines, tmplist):
     return tmplist
 
 
-def analysis(lines, cell_length):
+def analysis(lines):
     jam = 0
     for i in range(1, 4):
-        for j in range(cell_length-1):
+        for j in range(len(lines[0])-2):
             if lines[i][j] == 1 and lines[i][j+1] == 1:
                 jam += 1
     return jam
@@ -114,12 +114,16 @@ def main(version):
     if version == 1:
         lines[3][-cell+3] = 2
         lines[3][-cell+4] = 2
+    elif version == 2:
+        lines[3][-10] = 2
+        lines[3][-11] = 2
     tmplist = copy.deepcopy(lines)
     for i in range(line):
         print(lines[i])
     print()
+    
     jamlist = []
-    trialnum = 5000
+    trialnum = 7000
     for _ in range(trialnum):
         tmplist = process(line, cell, lines, tmplist)
         for i in range(1, 4):
@@ -128,16 +132,23 @@ def main(version):
         #for i in range(line):
         #    print(tmplist[i])
         #print()
-        jamlist.append(analysis(tmplist, cell))
+        jamlist.append(analysis(tmplist))
         lines = copy.deepcopy(tmplist)
+    
     tmpdic = dict(collections.Counter(jamlist))
     print(tmpdic)
     data = sorted(tmpdic.items(), key=lambda x:x[0])
     dataX = [data[i][0] for i in range(len(data))]
     dataY = [data[i][1] for i in range(len(data))]
+    plt.xlabel("jam level")
+    plt.ylabel("frequency")
+    plt.grid()
     plt.plot(dataX,dataY)
+    #fig = plt.figure()
+    plt.savefig("img{}.png".format(version))
     plt.show()
     
 if __name__ == "__main__":
     main(0)
     main(1)
+    main(2)
